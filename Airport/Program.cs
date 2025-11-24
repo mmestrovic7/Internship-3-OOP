@@ -23,16 +23,16 @@ namespace Airport
 
             while (true)
             {
-                Console.WriteLine("SUSTAV ZA UPRAVLJANJE AERODROMOM");
+                ConsoleHelper.PrintHeader("SUSTAV ZA UPRAVLJANJE AERODROMOM");
                 Console.WriteLine("1 - Putnici");
                 Console.WriteLine("2 - Letovi");
                 Console.WriteLine("3 - Avioni");
                 Console.WriteLine("4 - Posada");
                 Console.WriteLine("5 - Izlaz iz programa");
                 Console.WriteLine();
-                Console.WriteLine("Odabir: ");
+                Console.Write("Odabir: ");
 
-                var choice = InputValidation.ValidIntegerInput(1,5);
+                var choice = InputValidation.IsValidIntegerInput(1,5);
 
                 switch (choice)
                 {

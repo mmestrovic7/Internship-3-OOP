@@ -21,22 +21,22 @@ public class PassengersMenu
     {
         while (true)
         {
-            Console.WriteLine("IZBORNIK - PUTNICI");
+            ConsoleHelper.PrintHeader("IZBORNIK - PUTNICI");
             Console.WriteLine("1 - Registracija");
             Console.WriteLine("2 - Prijava");
             Console.WriteLine("3 - Povratak na glavni izbornik");
             Console.WriteLine();
-            Console.WriteLine("Odabir:");
+            Console.Write("Odabir: ");
 
-            int choice = InputValidation.ValidIntegerInput(1,3);
+            int choice = InputValidation.IsValidIntegerInput(1,3);
 
             switch (choice)
             {
                 case 1:
-                    //Register();
+                    Register();
                     break;
                 case 2:
-                    //Login();
+                    Login();
                     break;
                 case 3:
                     return;
@@ -47,5 +47,85 @@ public class PassengersMenu
             }
         }
     }
+    private void Register()
+    {
+        ConsoleHelper.PrintHeader("REGISTRACIJA");
+
+        string firstName = InputValidation.ReadLine("Ime: ");
+        if (!InputValidation.IsValidName(firstName))
+        {
+            ConsoleHelper.PrintError("Neispravno ime.");
+            ConsoleHelper.WaitForKey();
+            return;
+        }
+
+        string lastName = InputValidation.ReadLine("Prezime: ");
+        if (!InputValidation.IsValidName(lastName))
+        {
+            ConsoleHelper.PrintError("Neispravno prezime.");
+            ConsoleHelper.WaitForKey();
+            return;
+        }
+
+        DateTime birthDay = InputValidation.ReadDateTime("Datum rodenja: ");
+        if (!InputValidation.IsValidBirthDay(birthDay))
+        {
+            ConsoleHelper.PrintError("Neispravna godina rođenja!");
+            ConsoleHelper.WaitForKey();
+            return;
+        }
+
+        string email = InputValidation.ReadLine("Email: ");
+        if (!InputValidation.IsValidEmail(email))
+        {
+            ConsoleHelper.PrintError("Neispravan email format.");
+            ConsoleHelper.WaitForKey();
+            return;
+        }
+
+        string password = InputValidation.ReadLine("Lozinka (min. 6 znakova): ");
+        if (!InputValidation.IsValidPassword(password))
+        {
+            ConsoleHelper.PrintError("Lozinka mora imati najmanje 6 znakova.");
+            ConsoleHelper.WaitForKey();
+            return;
+        }
+
+        if (passengerManager.RegisterPassenger(firstName, lastName, birthDay, email, password))
+            ConsoleHelper.PrintSuccess("Uspješno ste se registrirali!");
+        
+        else
+            ConsoleHelper.PrintError("Email je već registriran.");
+
+        ConsoleHelper.WaitForKey();
+    }
+    private void Login()
+    {
+        ConsoleHelper.PrintHeader("PRIJAVA");
+        ConsoleHelper.PrintHeader("petar@test.com, password123");
+        while (true)
+        {
+            string email = InputValidation.ReadLine("Email (ili 'x' za povratak): ");
+            if (email.ToLower() == "x")
+                return;
+
+            string password = InputValidation.ReadLine("Lozinka: ");
+            
+            var passenger = passengerManager.Login(email, password);
+            if (passenger != null)
+            {
+                ConsoleHelper.PrintSuccess($"Dobrodošli, {passenger.FirstName}!");
+                ConsoleHelper.WaitForKey();
+                //ShowPassengerMenu(passenger);
+                return;
+            }
+            else
+            {
+                ConsoleHelper.PrintError("Neispravni podaci. Pokušajte ponovo.");
+                Console.WriteLine();
+            }
+        }
+    }
+
     
 }

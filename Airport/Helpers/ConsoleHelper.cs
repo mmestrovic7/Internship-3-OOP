@@ -5,6 +5,14 @@ namespace Airport.Helpers;
 
 public class ConsoleHelper
 {
+        public static void PrintHeader(string title)
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"{title}");
+            Console.WriteLine();
+            Console.ResetColor();
+        }
         public static void PrintSuccess(string message)
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -38,7 +46,7 @@ public class ConsoleHelper
             while (true)
             {
                 Console.Write($"{message} (y/n): ");
-                string input = Console.ReadLine()?.Trim().ToLower();
+                string? input = Console.ReadLine()?.Trim().ToLower();
 
                 if (input == "y" || input == "yes" || input == "da")
                     return true;
@@ -48,10 +56,10 @@ public class ConsoleHelper
                 PrintError("Molimo unesite 'y' za da ili 'n' za ne.");
             }
         }
-
         public static void WaitForKey()
         {
             Console.WriteLine("\nPritisnite bilo koju tipku za nastavak...");
             Console.ReadKey();
         }
+       
 }
