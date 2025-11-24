@@ -4,7 +4,7 @@ namespace Airport.Helpers;
 
 public class InputValidation
 {
-    public static int IsValidIntegerInput()
+    public static int ValidIntegerInput()
     {
         int intInput;
         while (true)
@@ -16,7 +16,7 @@ public class InputValidation
         }
     }
 
-    public static int IsValidIntegerInput(int min, int max)
+    public static int ValidIntegerInput(int min, int max)
     {
         int intInput;
         while (true)

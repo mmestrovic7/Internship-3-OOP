@@ -32,7 +32,7 @@ namespace Airport
                 Console.WriteLine();
                 Console.Write("Odabir: ");
 
-                var choice = InputValidation.IsValidIntegerInput(1,5);
+                var choice = InputValidation.ValidIntegerInput(1,5);
 
                 switch (choice)
                 {

@@ -29,7 +29,7 @@ public class PassengersMenu
             Console.WriteLine();
             Console.Write("Odabir: ");
 
-            int choice = InputValidation.IsValidIntegerInput(1,3);
+            int choice = InputValidation.ValidIntegerInput(1,3);
 
             switch (choice)
             {
@@ -139,7 +139,7 @@ public class PassengersMenu
             Console.WriteLine();
             Console.Write("Odaberi: ");
 
-            int choice = InputValidation.IsValidIntegerInput(1,5);
+            int choice = InputValidation.ValidIntegerInput(1,5);
 
             switch (choice)
             {
@@ -147,7 +147,7 @@ public class PassengersMenu
                     ShowMyFlights(passenger);
                     break;
                 case 2:
-                    //SelectFlight(passenger);
+                    SelectFlight(passenger);
                     break;
                 case 3:
                     //SearchFlights();
@@ -186,6 +186,92 @@ public class PassengersMenu
 
         ConsoleHelper.WaitForKey();
     }
+    
+            private void SelectFlight(Passenger passenger)
+        {
+            ConsoleHelper.PrintHeader("ODABIR LETA");
+
+            var availableFlights = flightsManager.GetAvailableFlights();
+            if (availableFlights.Count == 0)
+            {
+                ConsoleHelper.PrintInfo("Nema dostupnih letova.");
+                ConsoleHelper.WaitForKey();
+                return;
+            }
+
+            Console.WriteLine("Dostupni letovi:\n");
+            ConsoleHelper.PrintFlightHeader();
+            foreach (var flight in availableFlights)
+                ConsoleHelper.PrintFlight(flight);
+
+            string flightId = InputValidation.ReadLine("Unesite ID leta (ili 'x' za povratak): ");
+            if (flightId.ToLower() == "x")
+                return;
+
+            var selectedFlight = flightsManager.GetFlightByNumber(flightId);
+            if (selectedFlight == null)
+            {
+                ConsoleHelper.PrintError("Let ne postoji.");
+                ConsoleHelper.WaitForKey();
+                return;
+            }
+
+            var selectedPlane = planesManager.GetPlaneById(selectedFlight.PlaneId);
+            if (selectedPlane == null)
+            {
+                ConsoleHelper.PrintError("Avion nije pronađen.");
+                ConsoleHelper.WaitForKey();
+                return;
+            }
+
+            Console.WriteLine("\nDostupne kategorije:");
+            int categoryIndex = 1;
+            var availableCategories = selectedPlane.SeatsByCategory.Keys.ToList();
+            foreach (var category in availableCategories)
+            {
+                if (selectedFlight.HasAvailableSeats(selectedPlane, category))
+                {
+                    Console.WriteLine($"{categoryIndex} - {category}");
+                    categoryIndex++;
+                }
+            }
+
+            if (categoryIndex == 1)
+            {
+                ConsoleHelper.PrintError("Nema dostupnih mjesta na ovom letu.");
+                ConsoleHelper.WaitForKey();
+                return;
+            }
+
+            int categoryChoice = InputValidation.ValidIntegerInput();
+            if (categoryChoice < 1 || categoryChoice >= categoryIndex)
+            {
+                ConsoleHelper.PrintError("Neispravan odabir.");
+                ConsoleHelper.WaitForKey();
+                return;
+            }
+
+            var selectedCategory = availableCategories[categoryChoice - 1];
+
+            if (!ConsoleHelper.Confirm($"Želite li rezervirati let {selectedFlight.FlightNumber} u {selectedCategory} kategoriji?"))
+            {
+                ConsoleHelper.PrintInfo("Rezervacija otkazana.");
+                ConsoleHelper.WaitForKey();
+                return;
+            }
+
+            if (passengerManager.BookFlight(passenger.Id, selectedFlight.Id, selectedCategory) &&
+                flightsManager.BookSeat(selectedFlight.Id, selectedCategory))
+            {
+                ConsoleHelper.PrintSuccess("Let uspješno rezerviran!");
+            }
+            else
+            {
+                ConsoleHelper.PrintError("Greška pri rezervaciji leta.");
+            }
+
+            ConsoleHelper.WaitForKey();
+        }
 
 
     
