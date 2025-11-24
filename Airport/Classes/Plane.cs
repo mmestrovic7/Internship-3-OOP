@@ -7,12 +7,10 @@ public class Plane : Base
     public string Name { get; set; }
     public int ManufactureYear { get; set; }
     public Dictionary<SeatCategory, int> SeatsByCategory { get; set; }
-    public int CompletedFlights { get; set; }
-
+    
     public Plane()
     {
         SeatsByCategory = new Dictionary<SeatCategory, int>();
-        CompletedFlights = 0;
     }
 
     public int GetTotalCapacity()

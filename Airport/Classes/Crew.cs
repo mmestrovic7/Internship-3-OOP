@@ -1,6 +1,6 @@
 namespace Airport.Classes;
 
-public class Crew
+public class Crew : Base
 {
     public string Name { get; set; }
     public string PilotId { get; set; }
