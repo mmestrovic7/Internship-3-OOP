@@ -41,6 +41,28 @@ public class ConsoleHelper
             Console.ResetColor();
         }
 
+        public static void PrintFlightHeader()
+        {
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("id - naziv - vrijeme polaska - vrijeme dolaska - udaljenost - vrijeme putovanja");
+            Console.ResetColor();
+            
+        }
+        public static void PrintFlight(Flight? flight)
+        {
+            if (flight == null)
+            {
+                Console.WriteLine("No flight data available.");
+                return;
+            }
+            string departureTime = flight.DepartureTime.ToString("yyyy-MM-dd HH:mm");
+            string arrivalTime = flight.ArrivalTime.ToString("yyyy-MM-dd HH:mm");
+            string duration = flight.Duration.ToString(@"hh\:mm");
+            
+            Console.WriteLine($"{flight.FlightNumber} - {flight.DepartureLocation} - {flight.ArrivalLocation} - {departureTime} - {arrivalTime}  - {flight.Distance} km - {duration}");
+            
+        }
+
         public static bool Confirm(string message)
         {
             while (true)

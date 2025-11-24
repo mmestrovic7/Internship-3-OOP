@@ -1,3 +1,4 @@
+using Airport.Classes;
 using Airport.Helpers;
 using Airport.Managers;
 
@@ -101,8 +102,7 @@ public class PassengersMenu
     }
     private void Login()
     {
-        ConsoleHelper.PrintHeader("PRIJAVA");
-        ConsoleHelper.PrintHeader("petar@test.com, password123");
+        ConsoleHelper.PrintHeader("PRIJAVA (test: petar@test.com, password123)");
         while (true)
         {
             string email = InputValidation.ReadLine("Email (ili 'x' za povratak): ");
@@ -116,7 +116,7 @@ public class PassengersMenu
             {
                 ConsoleHelper.PrintSuccess($"Dobrodošli, {passenger.FirstName}!");
                 ConsoleHelper.WaitForKey();
-                //ShowPassengerMenu(passenger);
+                ShowPassengerMenu(passenger);
                 return;
             }
             else
@@ -126,6 +126,67 @@ public class PassengersMenu
             }
         }
     }
+    private void ShowPassengerMenu(Passenger passenger)
+    {
+        while (true)
+        {
+            ConsoleHelper.PrintHeader($"IZBORNIK PUTNIKA - {passenger.GetFullName()}");
+            Console.WriteLine("1 - Prikaz mojih letova");
+            Console.WriteLine("2 - Odabir leta");
+            Console.WriteLine("3 - Pretraživanje letova");
+            Console.WriteLine("4 - Otkazivanje leta");
+            Console.WriteLine("5 - Odjava");
+            Console.WriteLine();
+            Console.Write("Odaberi: ");
+
+            int choice = InputValidation.IsValidIntegerInput(1,5);
+
+            switch (choice)
+            {
+                case 1:
+                    ShowMyFlights(passenger);
+                    break;
+                case 2:
+                    //SelectFlight(passenger);
+                    break;
+                case 3:
+                    //SearchFlights();
+                    break;
+                case 4:
+                    //CancelFlight(passenger);
+                    break;
+                case 5:
+                    return;
+                default:
+                    ConsoleHelper.PrintError("Neispravan odabir.");
+                    ConsoleHelper.WaitForKey();
+                    break;
+            }
+        }
+    }
+    private void ShowMyFlights(Passenger passenger)
+    {
+        ConsoleHelper.PrintHeader("MOJI LETOVI");
+
+        var flightIds = passengerManager.GetPassengerFlights(passenger.Id);
+        if (flightIds.Count == 0)
+        {
+            ConsoleHelper.PrintInfo("Nemate rezerviranih letova.");
+            ConsoleHelper.WaitForKey();
+            return;
+        }
+        ConsoleHelper.PrintFlightHeader();
+        foreach (var flightId in flightIds)
+        {
+            var flight = flightsManager.GetFlightById(flightId);
+            
+            ConsoleHelper.PrintFlight(flight);
+            Console.WriteLine();
+        }
+
+        ConsoleHelper.WaitForKey();
+    }
+
 
     
 }
