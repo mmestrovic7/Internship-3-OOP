@@ -41,27 +41,29 @@ public class ConsoleHelper
             Console.ResetColor();
         }
 
+        public static void PrintId(string id)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\nid: {id}");
+            Console.ResetColor();
+            Console.WriteLine();
+        }
+
         public static void PrintFlightHeader()
         {
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("broj leta - mjesto polaska - mjesto dolaska - vrijeme polaska - vrijeme dolaska - udaljenost - vrijeme putovanja");
-            Console.ResetColor();
-            
+            PrintHeader("broj leta - mjesto polaska - mjesto dolaska - vrijeme polaska - vrijeme dolaska - udaljenost - vrijeme putovanja");
         }
         public static void PrintFlight(Flight? flight)
         {
             if (flight == null)
             {
-                Console.WriteLine("No flight data available.");
+                ConsoleHelper.PrintError("Nema podataka o letu.");
                 return;
             }
             string departureTime = flight.DepartureTime.ToString("yyyy-MM-dd HH:mm");
             string arrivalTime = flight.ArrivalTime.ToString("yyyy-MM-dd HH:mm");
             string duration = flight.Duration.ToString(@"hh\:mm");
-            Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"\nid: {flight.Id}");
-            Console.ResetColor();
+            PrintId(flight.Id);
             Console.WriteLine($"{flight.FlightNumber} - {flight.DepartureLocation} - {flight.ArrivalLocation} - {departureTime} - {arrivalTime}  - {flight.Distance} km - {duration}");
             
         }
@@ -94,6 +96,40 @@ public class ConsoleHelper
             }
             Console.WriteLine();
         }
+
+        public static void PrintPlaneHeader()
+        {
+            PrintHeader("naziv - godina proizvodnje - kapacitet");
+        }
+        public static void PrintPlane(Plane? plane)
+        {
+            if (plane == null)
+            {
+                ConsoleHelper.PrintError("Nema podataka o avionu.");
+                return;
+            }
+            PrintId(plane.Id);
+            Console.WriteLine($"{plane.Name} - {plane.ManufactureYear} - {plane.GetTotalCapacity()} sjedala");
+        }
+
+        public static void PrintCrewHeader()
+        {
+            PrintHeader("naziv - status");
+        }
+        public static void PrintCrew(Crew crew)
+        {
+            if (crew == null)
+            {
+                ConsoleHelper.PrintError("Nema podataka o posadi.");
+                return;
+            }
+
+            string crewStatus = crew.IsComplete() ? "Kompletna" : "Nekompletna";
+            PrintId(crew.Id);
+            Console.WriteLine($"{crew.Name} - {crewStatus}");
+            Console.WriteLine();
+        }
+
 
         public static bool Confirm(string message)
         {
