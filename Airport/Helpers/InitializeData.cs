@@ -140,6 +140,13 @@ public class InitializeData
             plane3.SeatsByCategory[SeatCategory.Standard] = 100;
             plane3.SeatsByCategory[SeatCategory.Business] = 20;
             planesManager.AddPlane(plane3);
+            var plane4 = new Plane
+            {
+                Name = "Kapacitet test",
+                ManufactureYear = 2020
+            };
+            plane4.SeatsByCategory[SeatCategory.Standard] = 2;
+            planesManager.AddPlane(plane4);
         }
 
         private static void SeedFlights(FlightsManager flightsManager, PlanesManager planesManager, CrewManager crewManager)
@@ -202,6 +209,19 @@ public class InitializeData
             };
             flight4.Duration = flight4.ArrivalTime - flight4.DepartureTime;
             flightsManager.AddFlight(flight4);
+            var flight5 = new Flight
+            {
+                FlightNumber = "OU505",
+                DepartureLocation = "Zagreb",
+                ArrivalLocation = "Pariz",
+                DepartureTime = DateTime.Now.AddHours(30),
+                ArrivalTime = DateTime.Now.AddHours(31).AddMinutes(45),
+                Distance = 760,
+                PlaneId = planes[3].Id,
+                CrewId = crews[1].Id
+            };
+            flight4.Duration = flight5.ArrivalTime - flight5.DepartureTime;
+            flightsManager.AddFlight(flight5);
         }
 
         private static void SeedPassengers(PassengerManager passengerManager, FlightsManager flightsManager)
@@ -219,6 +239,9 @@ public class InitializeData
 
                 passengerManager.BookFlight(passenger1.Id, flights[1].Id, SeatCategory.Standard);
                 flightsManager.BookSeat(flights[1].Id, SeatCategory.Standard);
+                
+                passengerManager.BookFlight(passenger1.Id, flights[4].Id, SeatCategory.Standard);
+                flightsManager.BookSeat(flights[4].Id, SeatCategory.Standard);
             }
         }
 }

@@ -27,6 +27,17 @@ public class InputValidation
             ConsoleHelper.PrintError($"Neispravan unos, unesi broj {min}-{max}: ");
         }
     }
+    public static double ValidDoubleInput(string prompt)
+    {
+        while (true)
+        {
+            Console.Write(prompt);
+            if (double.TryParse(Console.ReadLine(), out double result))
+                return result;
+
+            ConsoleHelper.PrintError("Neispravan unos. Molimo unesite decimalni broj.");
+        }
+    }
 
     public static bool IsValidEmail(string email)
     {
@@ -44,7 +55,7 @@ public class InputValidation
 
     public static bool IsValidName(string name)
     {
-        return !string.IsNullOrWhiteSpace(name) && name.Length >= 2 && name.All(char.IsLetter);
+        return !string.IsNullOrWhiteSpace(name) && name.Length >= 2 && name.All(c => char.IsLetter(c) || c == ' ' || c == '-');
     }
 
     public static bool IsValidBirthDay(DateTime birthDay)
@@ -52,6 +63,16 @@ public class InputValidation
         int year = DateTime.Now.Year;
         return year >= 1900 && birthDay < DateTime.Now;
     }
+    public static bool IsValidFutureDateTime(DateTime dateTime)
+    {
+        return dateTime > DateTime.Now;
+    }
+
+    public static bool IsValidDistance(double distance)
+    {
+        return distance > 0 && distance <= 25000;
+    }
+
     public static string ReadLine(string prompt)
     {
         Console.Write(prompt);
