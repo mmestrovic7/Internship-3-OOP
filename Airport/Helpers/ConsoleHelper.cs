@@ -5,6 +5,14 @@ namespace Airport.Helpers;
 
 public class ConsoleHelper
 {
+        public static void PrintHeader(string title)
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"{title}");
+            Console.WriteLine();
+            Console.ResetColor();
+        }
         public static void PrintSuccess(string message)
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -33,12 +41,66 @@ public class ConsoleHelper
             Console.ResetColor();
         }
 
+        public static void PrintFlightHeader()
+        {
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("broj leta - mjesto polaska - mjesto dolaska - vrijeme polaska - vrijeme dolaska - udaljenost - vrijeme putovanja");
+            Console.ResetColor();
+            
+        }
+        public static void PrintFlight(Flight? flight)
+        {
+            if (flight == null)
+            {
+                Console.WriteLine("No flight data available.");
+                return;
+            }
+            string departureTime = flight.DepartureTime.ToString("yyyy-MM-dd HH:mm");
+            string arrivalTime = flight.ArrivalTime.ToString("yyyy-MM-dd HH:mm");
+            string duration = flight.Duration.ToString(@"hh\:mm");
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\nid: {flight.Id}");
+            Console.ResetColor();
+            Console.WriteLine($"{flight.FlightNumber} - {flight.DepartureLocation} - {flight.ArrivalLocation} - {departureTime} - {arrivalTime}  - {flight.Distance} km - {duration}");
+            
+        }
+        public static void PrintFlightDetailed(Flight flight, Plane plane, Crew crew)
+        {
+            if (flight == null || plane == null)
+                return;
+
+            Console.WriteLine($"ID: {flight.Id}");
+            Console.WriteLine($"Broj leta: {flight.FlightNumber}");
+            Console.WriteLine($"Polazište: {flight.DepartureLocation}");
+            Console.WriteLine($"Odredište: {flight.ArrivalLocation}");
+            Console.WriteLine($"Vrijeme polaska: {flight.DepartureTime:dd.MM.yyyy HH:mm}");
+            Console.WriteLine($"Vrijeme dolaska: {flight.ArrivalTime:dd.MM.yyyy HH:mm}");
+            Console.WriteLine($"Trajanje leta: {flight.Duration.Hours}h {flight.Duration.Minutes}min");
+            Console.WriteLine($"Udaljenost: {flight.Distance:F0} km");
+            Console.WriteLine($"Avion: {plane.Name}");
+            
+            if (crew != null)
+                Console.WriteLine($"Posada: {crew.Name}");
+
+            Console.WriteLine("\nZauzeto/Ukupno sjedala po kategorijama:");
+            foreach (var category in plane.SeatsByCategory.Keys)
+            {
+                int booked = flight.BookedSeatsByCategory.ContainsKey(category) 
+                    ? flight.BookedSeatsByCategory[category] 
+                    : 0;
+                int total = plane.SeatsByCategory[category];
+                Console.WriteLine($"  {category}: {booked}/{total}");
+            }
+            Console.WriteLine();
+        }
+
         public static bool Confirm(string message)
         {
             while (true)
             {
                 Console.Write($"{message} (y/n): ");
-                string input = Console.ReadLine()?.Trim().ToLower();
+                string? input = Console.ReadLine()?.Trim().ToLower();
 
                 if (input == "y" || input == "yes" || input == "da")
                     return true;
@@ -48,10 +110,10 @@ public class ConsoleHelper
                 PrintError("Molimo unesite 'y' za da ili 'n' za ne.");
             }
         }
-
         public static void WaitForKey()
         {
             Console.WriteLine("\nPritisnite bilo koju tipku za nastavak...");
             Console.ReadKey();
         }
+       
 }
