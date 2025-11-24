@@ -16,7 +16,7 @@ namespace Airport
 
             InitializeData.Seed(passengerManager, planesManager, flightsManager, crewManager);
 
-            //var passengersMenu = new PassengersMenu(passengerManager, flightsManager, planesManager, crewManager);
+            var passengersMenu = new PassengersMenu(passengerManager, flightsManager, planesManager, crewManager);
             //var flightsMenu = new FlightsMenu(flightsManager, planesManager, crewManager);
             //var planesMenu = new PlanesMenu(planesManager, flightsManager);
             //var crewMenu = new CrewMenu(crewManager);
@@ -36,16 +36,16 @@ namespace Airport
 
                 switch (choice)
                 {
-                    case '1':
-                        //passengersMenu.Show();
+                    case 1:
+                        passengersMenu.Show();
                         break;
-                    case '2':
+                    case 2:
                         //flightsMenu.Show();
                         break;
-                    case '3':
+                    case 3:
                         //planesMenu.Show();
                         break;
-                    case '4':
+                    case 4:
                         //crewMenu.Show();
                         break;
                     case 5:
