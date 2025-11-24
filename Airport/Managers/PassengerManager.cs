@@ -59,7 +59,7 @@ public class PassengerManager
             var passenger = passengers.FirstOrDefault(p => p.Id == passengerId);
             if (passenger == null)
                 return false;
-
+            
             if (passenger.BookedFlightIds.Remove(flightId))
             {
                 passenger.FlightCategories.Remove(flightId);
