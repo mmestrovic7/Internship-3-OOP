@@ -44,7 +44,7 @@ public class ConsoleHelper
         public static void PrintFlightHeader()
         {
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("id - naziv - vrijeme polaska - vrijeme dolaska - udaljenost - vrijeme putovanja");
+            Console.WriteLine("broj leta - mjesto polaska - mjesto dolaska - vrijeme polaska - vrijeme dolaska - udaljenost - vrijeme putovanja");
             Console.ResetColor();
             
         }
@@ -58,9 +58,41 @@ public class ConsoleHelper
             string departureTime = flight.DepartureTime.ToString("yyyy-MM-dd HH:mm");
             string arrivalTime = flight.ArrivalTime.ToString("yyyy-MM-dd HH:mm");
             string duration = flight.Duration.ToString(@"hh\:mm");
-            
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\nid: {flight.Id}");
+            Console.ResetColor();
             Console.WriteLine($"{flight.FlightNumber} - {flight.DepartureLocation} - {flight.ArrivalLocation} - {departureTime} - {arrivalTime}  - {flight.Distance} km - {duration}");
             
+        }
+        public static void PrintFlightDetailed(Flight flight, Plane plane, Crew crew)
+        {
+            if (flight == null || plane == null)
+                return;
+
+            Console.WriteLine($"ID: {flight.Id}");
+            Console.WriteLine($"Broj leta: {flight.FlightNumber}");
+            Console.WriteLine($"Polazište: {flight.DepartureLocation}");
+            Console.WriteLine($"Odredište: {flight.ArrivalLocation}");
+            Console.WriteLine($"Vrijeme polaska: {flight.DepartureTime:dd.MM.yyyy HH:mm}");
+            Console.WriteLine($"Vrijeme dolaska: {flight.ArrivalTime:dd.MM.yyyy HH:mm}");
+            Console.WriteLine($"Trajanje leta: {flight.Duration.Hours}h {flight.Duration.Minutes}min");
+            Console.WriteLine($"Udaljenost: {flight.Distance:F0} km");
+            Console.WriteLine($"Avion: {plane.Name}");
+            
+            if (crew != null)
+                Console.WriteLine($"Posada: {crew.Name}");
+
+            Console.WriteLine("\nZauzeto/Ukupno sjedala po kategorijama:");
+            foreach (var category in plane.SeatsByCategory.Keys)
+            {
+                int booked = flight.BookedSeatsByCategory.ContainsKey(category) 
+                    ? flight.BookedSeatsByCategory[category] 
+                    : 0;
+                int total = plane.SeatsByCategory[category];
+                Console.WriteLine($"  {category}: {booked}/{total}");
+            }
+            Console.WriteLine();
         }
 
         public static bool Confirm(string message)
