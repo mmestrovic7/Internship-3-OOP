@@ -23,7 +23,7 @@ public class InitializeData
             {
                 FirstName = "Ivan",
                 LastName = "Meštrović",
-                BirthDay = new DateTime(1975,30,06),
+                BirthDay = new DateTime(1975,06,30),
                 Gender = Gender.Male,
                 Position = CrewPosition.Pilot
             });
@@ -32,7 +32,7 @@ public class InitializeData
             {
                 FirstName = "Marko",
                 LastName = "Marović",
-                BirthDay = new DateTime(1985,30,05),
+                BirthDay = new DateTime(1985,05,05),
                 Gender = Gender.Male,
                 Position = CrewPosition.Pilot
             });
@@ -41,7 +41,7 @@ public class InitializeData
             {
                 FirstName = "Ana",
                 LastName = "Udiljak",
-                BirthDay = new DateTime(1992,15,05),
+                BirthDay = new DateTime(1992,11,30),
                 Gender = Gender.Female,
                 Position = CrewPosition.Copilot
             });
@@ -50,7 +50,7 @@ public class InitializeData
             {
                 FirstName = "Lucija",
                 LastName = "Topić",
-                BirthDay = new DateTime(1995,05,08),
+                BirthDay = new DateTime(1995,12,09),
                 Gender = Gender.Female,
                 Position = CrewPosition.Copilot
             });
@@ -59,7 +59,7 @@ public class InitializeData
             {
                 FirstName = "Maja",
                 LastName = "Babić",
-                BirthDay = new DateTime(1976,30,05),
+                BirthDay = new DateTime(1976,12,10),
                 Gender = Gender.Female,
                 Position = CrewPosition.FlightAttendant
             });
@@ -68,7 +68,7 @@ public class InitializeData
             {
                 FirstName = "Luka",
                 LastName = "Petrović",
-                BirthDay = new DateTime(1985,30,05),
+                BirthDay = new DateTime(1985,02,05),
                 Gender = Gender.Male,
                 Position = CrewPosition.FlightAttendant
             });
@@ -77,7 +77,7 @@ public class InitializeData
             {
                 FirstName = "Sara",
                 LastName = "Jurić",
-                BirthDay = new DateTime(1988,30,05),
+                BirthDay = new DateTime(1988,02,05),
                 Gender = Gender.Female,
                 Position = CrewPosition.FlightAttendant
             });
@@ -86,7 +86,7 @@ public class InitializeData
             {
                 FirstName = "Tomislav",
                 LastName = "Knežević",
-                BirthDay = new DateTime(1980,30,09),
+                BirthDay = new DateTime(1980,01,09),
                 Gender = Gender.Male,
                 Position = CrewPosition.FlightAttendant
             });
@@ -206,9 +206,9 @@ public class InitializeData
 
         private static void SeedPassengers(PassengerManager passengerManager, FlightsManager flightsManager)
         {
-            passengerManager.RegisterPassenger("Petar", "Perić",  new DateTime(1980,30,06), "petar@test.com", "password123");
-            passengerManager.RegisterPassenger("Ivana", "Ivić", new DateTime(2000,13,05), "ivana@test.com", "password123");
-            passengerManager.RegisterPassenger("Ante", "Antić", new DateTime(1990,17,05), "ante@test.com", "password123");
+            passengerManager.RegisterPassenger("Petar", "Perić",  new DateTime(1980,03,06), "petar@test.com", "password123");
+            passengerManager.RegisterPassenger("Ivana", "Ivić", new DateTime(2000,11,05), "ivana@test.com", "password123");
+            passengerManager.RegisterPassenger("Ante", "Antić", new DateTime(1990,1,05), "ante@test.com", "password123");
 
             var flights = flightsManager.GetAllFlights();
             if (flights.Count >= 2)
