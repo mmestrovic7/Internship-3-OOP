@@ -289,74 +289,73 @@ public class PassengersMenu
         ConsoleHelper.WaitForKey();
     }
     private void CancelFlight(Passenger passenger)
+    {
+        ConsoleHelper.PrintHeader("OTKAZIVANJE LETA");
+
+        var flightIds = passengerManager.GetPassengerFlights(passenger.Id);
+        if (flightIds.Count == 0)
         {
-            ConsoleHelper.PrintHeader("OTKAZIVANJE LETA");
-            var flightIds = passengerManager.GetPassengerFlights(passenger.Id);
-            if (flightIds.Count == 0)
-            {
-                ConsoleHelper.PrintInfo("Nemate rezerviranih letova.");
-                ConsoleHelper.WaitForKey();
-                return;
-            }
-
-            Console.WriteLine("Vaši letovi:\n");
-            ConsoleHelper.PrintFlightHeader();
-            foreach (var flightId in flightIds)
-            {
-                var flight = flightsManager.GetFlightById(flightId);
-                var plane = planesManager.GetPlaneById(flight?.PlaneId);
-                
-                if (flight != null && plane != null)
-                {
-                    var hoursUntil = (flight.DepartureTime - DateTime.Now).TotalHours;
-                    ConsoleHelper.PrintFlight(flight);
-
-                    if (hoursUntil <= 24)
-                    {
-                        ConsoleHelper.PrintWarning("Ne može se otkazati (manje od 24h do polaska)");
-                    }
-                }
-            }
-
-            string cancelId = InputValidation.ReadLine("Unesite ID leta za otkazivanje (ili 'x' za povratak): ");
-            if (cancelId.ToLower() == "x")
-                return;
-
-            var flightToCancel = flightsManager.GetFlightById(cancelId);
-            if (flightToCancel == null || !flightIds.Contains(cancelId))
-            {
-                ConsoleHelper.PrintError("Neispravan ID leta.");
-                ConsoleHelper.WaitForKey();
-                return;
-            }
-
-            var hoursUntilDeparture = (flightToCancel.DepartureTime - DateTime.Now).TotalHours;
-            if (hoursUntilDeparture <= 24)
-            {
-                ConsoleHelper.PrintError("Ne možete otkazati let koji polazi u sljedećih 24 sata.");
-                ConsoleHelper.WaitForKey();
-                return;
-            }
-
-            if (!ConsoleHelper.Confirm($"Želite li otkazati let {flightToCancel.FlightNumber}?"))
-            {
-                ConsoleHelper.PrintInfo("Otkazivanje prekinuto.");
-                ConsoleHelper.WaitForKey();
-                return;
-            }
-
-            var category = passengerManager.GetFlightCategory(passenger.Id, cancelId);
-            
-            if (passengerManager.CancelFlight(passenger.Id, cancelId) &&
-                flightsManager.CancelSeat(cancelId, category))
-            {
-                ConsoleHelper.PrintSuccess("Let uspješno otkazan!");
-            }
-            else
-            {
-                ConsoleHelper.PrintError("Greška pri otkazivanju leta.");
-            }
-
+            ConsoleHelper.PrintInfo("Nemate rezerviranih letova.");
             ConsoleHelper.WaitForKey();
+            return;
         }
+        
+        var cancellableFlights = new List<Flight>();
+
+        Console.WriteLine("Vaši letovi:\n");
+        ConsoleHelper.PrintFlightHeader();
+
+        foreach (var flightId in flightIds)
+        {
+            var flight = flightsManager.GetFlightById(flightId);
+            var plane = planesManager.GetPlaneById(flight?.PlaneId);
+            
+            if (flight != null && plane != null)
+            {
+                double hoursUntil = (flight.DepartureTime - DateTime.Now).TotalHours;
+                ConsoleHelper.PrintFlight(flight);
+                if (hoursUntil <= 24)
+                    ConsoleHelper.PrintWarning("Ne može se otkazati (manje od 24h do polaska)");
+                else
+                    cancellableFlights.Add(flight);
+            }
+        }
+        
+        if (cancellableFlights.Count == 0)
+        {
+            ConsoleHelper.PrintInfo("Nema letova koje možete otkazati.");
+            ConsoleHelper.WaitForKey();
+            return;
+        }
+        
+        string cancelId = InputValidation.ReadLine("Unesite ID leta za otkazivanje (ili 'x' za povratak): ");
+        if (cancelId.Equals("x", StringComparison.OrdinalIgnoreCase))
+            return;
+
+        var flightToCancel = cancellableFlights.FirstOrDefault(f => f.Id == cancelId);
+        if (flightToCancel == null)
+        {
+            ConsoleHelper.PrintError("Neispravan ID leta ili let se ne može otkazati.");
+            ConsoleHelper.WaitForKey();
+            return;
+        }
+        
+        if (!ConsoleHelper.Confirm($"Želite li otkazati let {flightToCancel.FlightNumber}?"))
+        {
+            ConsoleHelper.PrintInfo("Otkazivanje prekinuto.");
+            ConsoleHelper.WaitForKey();
+            return;
+        }
+        
+        var category = passengerManager.GetFlightCategory(passenger.Id, cancelId);
+        if (passengerManager.CancelFlight(passenger.Id, cancelId) &&
+            flightsManager.CancelSeat(cancelId, category))
+            ConsoleHelper.PrintSuccess("Let uspješno otkazan!");
+        
+        else
+            ConsoleHelper.PrintError("Greška pri otkazivanju leta.");
+
+        ConsoleHelper.WaitForKey();
+    }
+
 }

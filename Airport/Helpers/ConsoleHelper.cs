@@ -46,12 +46,14 @@ public class ConsoleHelper
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"\nid: {id}");
             Console.ResetColor();
-            Console.WriteLine();
         }
 
         public static void PrintFlightHeader()
         {
-            PrintHeader("broj leta - mjesto polaska - mjesto dolaska - vrijeme polaska - vrijeme dolaska - udaljenost - vrijeme putovanja");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("broj leta - mjesto polaska - mjesto dolaska - vrijeme polaska - vrijeme dolaska - udaljenost - vrijeme putovanja");
+            Console.WriteLine();
+            Console.ResetColor();
         }
         public static void PrintFlight(Flight? flight)
         {
@@ -99,7 +101,10 @@ public class ConsoleHelper
 
         public static void PrintPlaneHeader()
         {
-            PrintHeader("naziv - godina proizvodnje - kapacitet");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"\"naziv - godina proizvodnje - kapacitet\"");
+            Console.WriteLine();
+            Console.ResetColor();
         }
         public static void PrintPlane(Plane? plane)
         {
@@ -114,7 +119,10 @@ public class ConsoleHelper
 
         public static void PrintCrewHeader()
         {
-            PrintHeader("naziv - status");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"\"naziv - status\"");
+            Console.WriteLine();
+            Console.ResetColor();
         }
         public static void PrintCrew(Crew crew)
         {

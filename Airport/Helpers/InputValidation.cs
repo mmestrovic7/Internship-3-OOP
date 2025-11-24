@@ -72,6 +72,7 @@ public class InputValidation
     {
         return distance > 0 && distance <= 25000;
     }
+
     public static string ReadLine(string prompt)
     {
         Console.Write(prompt);

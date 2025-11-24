@@ -42,13 +42,13 @@ public class FlightsMenu
                     AddFlight();
                     break;
                 case 3:
-                    FlightSearchHelper.SearchFlights(flightsManager,  planesManager, crewManager);
+                    FlightSearchHelper.SearchFlights(flightsManager, planesManager, crewManager);
                     break;
                 case 4:
                     EditFlight();
                     break;
                 case 5:
-                    //DeleteFlight();
+                    DeleteFlight();
                     break;
                 case 6:
                     return;
@@ -59,6 +59,7 @@ public class FlightsMenu
             }
         }
     }
+
     private void ShowAllFlights()
     {
         ConsoleHelper.PrintHeader("SVI LETOVI");
@@ -70,6 +71,7 @@ public class FlightsMenu
             ConsoleHelper.WaitForKey();
             return;
         }
+
         ConsoleHelper.PrintFlightHeader();
         foreach (var flight in flights)
             ConsoleHelper.PrintFlight(flight);
@@ -137,6 +139,7 @@ public class FlightsMenu
             ConsoleHelper.WaitForKey();
             return;
         }
+
         ConsoleHelper.PrintPlaneHeader();
         foreach (var plane in planes)
             ConsoleHelper.PrintPlane(plane);
@@ -158,6 +161,7 @@ public class FlightsMenu
             ConsoleHelper.WaitForKey();
             return;
         }
+
         ConsoleHelper.PrintCrewHeader();
         foreach (var c in crews)
             ConsoleHelper.PrintCrew(c);
@@ -188,7 +192,7 @@ public class FlightsMenu
             Duration = arrivalTime - departureTime,
             Distance = distance,
             PlaneId = planeId,
-            CrewId = crewId 
+            CrewId = crewId
         };
 
         flightsManager.AddFlight(flight);
@@ -199,6 +203,10 @@ public class FlightsMenu
     private void EditFlight()
     {
         ConsoleHelper.PrintHeader("UREĐIVANJE LETA");
+        var flights = flightsManager.GetAllFlights();
+        ConsoleHelper.PrintFlightHeader();
+        foreach (var f in flights)
+            ConsoleHelper.PrintFlight(f);
 
         string id = InputValidation.ReadLine("Unesite ID leta: ");
         var flight = flightsManager.GetFlightById(id);
@@ -219,9 +227,12 @@ public class FlightsMenu
         Console.WriteLine("2 - Vrijeme dolaska");
         Console.WriteLine("3 - Oba vremena");
         Console.WriteLine("4 - Posadu");
+        Console.WriteLine("5 - Odustani");
         Console.WriteLine();
 
-        int choice = InputValidation.ValidIntegerInput(1,4);
+        int choice = InputValidation.ValidIntegerInput(1, 5);
+        if (choice == 5)
+            return;
 
         DateTime? newDeparture = null;
         DateTime? newArrival = null;
@@ -237,10 +248,11 @@ public class FlightsMenu
                 return;
             }
         }
+
         if (choice == 2 || choice == 3)
         {
-            newArrival = InputValidation.ReadDateTime("Novo vrijeme dolaska",true);
-        
+            newArrival = InputValidation.ReadDateTime("Novo vrijeme dolaska", true);
+
             DateTime compareTime = newDeparture ?? flight.DepartureTime;
             if (newArrival <= compareTime)
             {
@@ -288,4 +300,91 @@ public class FlightsMenu
 
         ConsoleHelper.WaitForKey();
     }
+
+    private void DeleteFlight()
+    {
+        ConsoleHelper.PrintHeader("BRISANJE LETA");
+
+        var flights = flightsManager.GetAllFlights();
+        if (flights.Count == 0)
+        {
+            ConsoleHelper.PrintInfo("Nema registriranih letova.");
+            ConsoleHelper.WaitForKey();
+            return;
+        }
+
+        Console.WriteLine("Svi letovi:\n");
+        ConsoleHelper.PrintFlightHeader();
+        var deletableFlights = new List<Flight>();
+
+        foreach (var flight in flights)
+        {
+            var plane = planesManager.GetPlaneById(flight.PlaneId);
+            double capacity = plane?.GetTotalCapacity() ?? 0;
+            int booked = flight.GetTotalBookedSeats();
+            double occupancy = capacity > 0 ? booked / capacity : 0;
+
+            double hoursUntil = (flight.DepartureTime - DateTime.Now).TotalHours;
+
+            ConsoleHelper.PrintFlight(flight);
+
+            bool cannotDelete = false;
+
+            if (capacity == 0 || plane == null)
+            {
+                ConsoleHelper.PrintWarning("Ne može se izbrisati (avion nije pronađen)");
+                cannotDelete = true;
+            }
+            else if (occupancy >= 0.5)
+            {
+                ConsoleHelper.PrintWarning($"Ne može se izbrisati (zauzeto {(occupancy * 100):F1}%)");
+                cannotDelete = true;
+            }
+            else if (hoursUntil <= 24)
+            {
+                ConsoleHelper.PrintWarning("Ne može se izbrisati (manje od 24h do polaska)");
+                cannotDelete = true;
+            }
+
+            if (!cannotDelete)
+                deletableFlights.Add(flight);
+
+            Console.WriteLine();
+        }
+
+        if (deletableFlights.Count == 0)
+        {
+            ConsoleHelper.PrintError("Nijedan let se trenutno ne može izbrisati.");
+            ConsoleHelper.WaitForKey();
+            return;
+        }
+        
+        string id = InputValidation.ReadLine("Unesite ID leta za brisanje (ili 'x' za povratak): ");
+        if (id.Equals("x", StringComparison.OrdinalIgnoreCase))
+            return;
+
+        var flightToDelete = deletableFlights.FirstOrDefault(f => f.Id == id);
+
+        if (flightToDelete == null)
+        {
+            ConsoleHelper.PrintError("Let ne postoji ili ga nije moguće obrisati.");
+            ConsoleHelper.WaitForKey();
+            return;
+        }
+
+        if (!ConsoleHelper.Confirm($"Želite li stvarno izbrisati let {flightToDelete.FlightNumber}?"))
+        {
+            ConsoleHelper.PrintInfo("Brisanje prekinuto.");
+            ConsoleHelper.WaitForKey();
+            return;
+        }
+        
+        if (flightsManager.DeleteFlight(id, planesManager))
+            ConsoleHelper.PrintSuccess("Let uspješno izbrisan!");
+        else
+            ConsoleHelper.PrintError("Greška pri brisanju leta.");
+
+        ConsoleHelper.WaitForKey();
+    }
+
 }
