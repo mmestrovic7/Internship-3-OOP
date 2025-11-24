@@ -72,7 +72,7 @@ public class ConsoleHelper
             if (flight == null || plane == null)
                 return;
 
-            Console.WriteLine($"ID: {flight.Id}");
+            PrintId(flight.Id);
             Console.WriteLine($"Broj leta: {flight.FlightNumber}");
             Console.WriteLine($"Polazište: {flight.DepartureLocation}");
             Console.WriteLine($"Odredište: {flight.ArrivalLocation}");

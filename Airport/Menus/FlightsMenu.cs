@@ -42,7 +42,7 @@ public class FlightsMenu
                     AddFlight();
                     break;
                 case 3:
-                    //SearchFlights();
+                    FlightSearchHelper.SearchFlights(flightsManager,  planesManager, crewManager);
                     break;
                 case 4:
                     //EditFlight();
