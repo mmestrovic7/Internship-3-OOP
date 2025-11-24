@@ -166,8 +166,8 @@ public class InitializeData
                 FlightNumber = "OU202",
                 DepartureLocation = "Split",
                 ArrivalLocation = "Paris",
-                DepartureTime = DateTime.Now.AddDays(3).AddHours(14),
-                ArrivalTime = DateTime.Now.AddDays(3).AddHours(16).AddMinutes(15),
+                DepartureTime = DateTime.Now.AddDays(0).AddHours(10),
+                ArrivalTime = DateTime.Now.AddDays(0).AddHours(12).AddMinutes(15),
                 Distance = 1250,
                 PlaneId = planes[1].Id,
                 CrewId = crews[1].Id
