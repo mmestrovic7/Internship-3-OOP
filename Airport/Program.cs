@@ -19,7 +19,7 @@ namespace Airport
             var passengersMenu = new PassengersMenu(passengerManager, flightsManager, planesManager, crewManager);
             var flightsMenu = new FlightsMenu(flightsManager, planesManager, crewManager);
             //var planesMenu = new PlanesMenu(planesManager, flightsManager);
-            //var crewMenu = new CrewMenu(crewManager);
+            var crewMenu = new CrewMenu(crewManager);
 
             while (true)
             {
@@ -46,7 +46,7 @@ namespace Airport
                         //planesMenu.Show();
                         break;
                     case 4:
-                        //crewMenu.Show();
+                        crewMenu.Show();
                         break;
                     case 5:
                         if (ConsoleHelper.Confirm("Želite li stvarno izaći iz programa?"))
