@@ -139,6 +139,19 @@ public class ConsoleHelper
             Console.WriteLine($"{crew.Name} - {crewStatus}");
             Console.WriteLine();
         }
+
+        public static void PrintCrewMember(CrewMember crewMember)
+        {
+
+            if (crewMember != null)
+            {
+                PrintId(crewMember.Id);
+                Console.WriteLine($" {crewMember.GetFullName()} - {crewMember.Position} - {crewMember.Gender} - {crewMember.BirthDay.Date.ToString("d")}");
+            }
+            else
+                PrintError("Nema podataka o clanu posade.");
+            
+        }
         public static void PrintCrewDetailed(Crew crew, CrewManager crewManager)
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -147,18 +160,15 @@ public class ConsoleHelper
             Console.WriteLine("\nČlanovi posade:");
 
             var pilot = crewManager.GetCrewMemberById(crew.PilotId);
-            if (pilot != null)
-                Console.WriteLine($" {pilot.GetFullName()} - {pilot.Position} - {pilot.Gender} - {pilot.BirthDay.Date.ToString("d")}");
-
+            PrintCrewMember(pilot);
+            
             var copilot = crewManager.GetCrewMemberById(crew.CopilotId);
-            if (copilot != null)
-                Console.WriteLine($" {copilot.GetFullName()} - {copilot.Position} - {copilot.Gender} - {copilot.BirthDay.ToString("d")}");
-
+            PrintCrewMember(copilot);
+            
             foreach (var faId in crew.FlightAttendantIds)
             {
                 var fa = crewManager.GetCrewMemberById(faId);
-                if (fa != null)
-                    Console.WriteLine($" {fa.GetFullName()} - {fa.Position} - {fa.Gender} - {fa.BirthDay.ToString("d")}");
+                PrintCrewMember(fa);
             }
             Console.WriteLine();
         }

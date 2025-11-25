@@ -36,6 +36,15 @@ public class InitializeData
                 Gender = Gender.Male,
                 Position = CrewPosition.Pilot
             });
+            
+            crewManager.AddCrewMember(new CrewMember
+            {
+                FirstName = "Marija",
+                LastName = "Meštrović",
+                BirthDay = new DateTime(2001,06,30),
+                Gender = Gender.Female,
+                Position = CrewPosition.Pilot
+            });
 
             crewManager.AddCrewMember(new CrewMember
             {
@@ -50,7 +59,15 @@ public class InitializeData
             {
                 FirstName = "Lucija",
                 LastName = "Topić",
-                BirthDay = new DateTime(1995,12,09),
+                BirthDay = new DateTime(201,08,05),
+                Gender = Gender.Female,
+                Position = CrewPosition.Copilot
+            });
+            crewManager.AddCrewMember(new CrewMember
+            {
+                FirstName = "Lana",
+                LastName = "Klarić",
+                BirthDay = new DateTime(2001,06,06),
                 Gender = Gender.Female,
                 Position = CrewPosition.Copilot
             });
@@ -90,6 +107,23 @@ public class InitializeData
                 Gender = Gender.Male,
                 Position = CrewPosition.FlightAttendant
             });
+            crewManager.AddCrewMember(new CrewMember
+            {
+                FirstName = "Lukas",
+                LastName = "Petrov",
+                BirthDay = new DateTime(1985,02,05),
+                Gender = Gender.Male,
+                Position = CrewPosition.FlightAttendant
+            });
+
+            crewManager.AddCrewMember(new CrewMember
+            {
+                FirstName = "Sarah",
+                LastName = "Jurich",
+                BirthDay = new DateTime(1988,02,05),
+                Gender = Gender.Female,
+                Position = CrewPosition.FlightAttendant
+            });
         }
 
         private static void SeedCrews(CrewManager crewManager)
@@ -98,16 +132,16 @@ public class InitializeData
             
             var crew1 = new Crew { Name = "Posada Alpha" };
             crew1.PilotId = allMembers[0].Id;
-            crew1.CopilotId = allMembers[2].Id;
-            crew1.FlightAttendantIds.Add(allMembers[4].Id);
-            crew1.FlightAttendantIds.Add(allMembers[5].Id);
+            crew1.CopilotId = allMembers[3].Id;
+            crew1.FlightAttendantIds.Add(allMembers[6].Id);
+            crew1.FlightAttendantIds.Add(allMembers[7].Id);
             crewManager.AddCrew(crew1);
 
             var crew2 = new Crew { Name = "Posada Bravo" };
             crew2.PilotId = allMembers[1].Id;
-            crew2.CopilotId = allMembers[3].Id;
-            crew2.FlightAttendantIds.Add(allMembers[6].Id);
-            crew2.FlightAttendantIds.Add(allMembers[7].Id);
+            crew2.CopilotId = allMembers[5].Id;
+            crew2.FlightAttendantIds.Add(allMembers[8].Id);
+            crew2.FlightAttendantIds.Add(allMembers[9].Id);
             crewManager.AddCrew(crew2);
         }
 
