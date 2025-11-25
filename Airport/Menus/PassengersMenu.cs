@@ -267,27 +267,6 @@ public class PassengersMenu
 
         ConsoleHelper.WaitForKey();
     }
-
-    private void SearchByNumber()
-    {
-        ConsoleHelper.PrintHeader("PRETRAŽIVANJE PO BROJU LETA (test: OU101)");
-    
-        string flightNumber = InputValidation.ReadLine("Unesite broj leta: ");
-        var flight = flightsManager.GetFlightByNumber(flightNumber);
-
-        if (flight != null)
-        {
-            var plane = planesManager.GetPlaneById(flight.PlaneId);
-            var crew = crewManager.GetCrewById(flight.CrewId);
-            ConsoleHelper.PrintFlightDetailed(flight, plane, crew);
-        }
-        else
-        {
-            ConsoleHelper.PrintError("Let nije pronađen.");
-        }
-
-        ConsoleHelper.WaitForKey();
-    }
     private void CancelFlight(Passenger passenger)
     {
         ConsoleHelper.PrintHeader("OTKAZIVANJE LETA");

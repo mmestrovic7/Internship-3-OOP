@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Runtime.InteropServices.ComTypes;
 using Airport.Classes;
 using Airport.Managers;
 
@@ -135,6 +137,39 @@ public class ConsoleHelper
             string crewStatus = crew.IsComplete() ? "Kompletna" : "Nekompletna";
             PrintId(crew.Id);
             Console.WriteLine($"{crew.Name} - {crewStatus}");
+            Console.WriteLine();
+        }
+
+        public static void PrintCrewMember(CrewMember crewMember)
+        {
+
+            if (crewMember != null)
+            {
+                PrintId(crewMember.Id);
+                Console.WriteLine($" {crewMember.GetFullName()} - {crewMember.Position} - {crewMember.Gender} - {crewMember.BirthDay.Date.ToString("d")}");
+            }
+            else
+                PrintError("Nema podataka o clanu posade.");
+            
+        }
+        public static void PrintCrewDetailed(Crew crew, CrewManager crewManager)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\nNaziv: {crew.Name} ");
+            Console.ResetColor();
+            Console.WriteLine("\nČlanovi posade:");
+
+            var pilot = crewManager.GetCrewMemberById(crew.PilotId);
+            PrintCrewMember(pilot);
+            
+            var copilot = crewManager.GetCrewMemberById(crew.CopilotId);
+            PrintCrewMember(copilot);
+            
+            foreach (var faId in crew.FlightAttendantIds)
+            {
+                var fa = crewManager.GetCrewMemberById(faId);
+                PrintCrewMember(fa);
+            }
             Console.WriteLine();
         }
 
