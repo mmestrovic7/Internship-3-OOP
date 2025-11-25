@@ -72,6 +72,15 @@ public class InputValidation
     {
         return distance > 0 && distance <= 25000;
     }
+    public static bool IsValidManufactureYear(int year)
+    {
+        int currentYear = DateTime.Now.Year;
+        return year >= 1950 && year <= currentYear;
+    }
+    public static bool IsValidSeatCount(int count)
+    {
+        return count > 0 && count <= 500;
+    }
 
     public static string ReadLine(string prompt)
     {
