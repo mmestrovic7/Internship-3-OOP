@@ -18,7 +18,7 @@ namespace Airport
 
             var passengersMenu = new PassengersMenu(passengerManager, flightsManager, planesManager, crewManager);
             var flightsMenu = new FlightsMenu(flightsManager, planesManager, crewManager);
-            //var planesMenu = new PlanesMenu(planesManager, flightsManager);
+            var planesMenu = new PlanesMenu(planesManager, flightsManager);
             var crewMenu = new CrewMenu(crewManager);
 
             while (true)
@@ -43,7 +43,7 @@ namespace Airport
                         flightsMenu.Show();
                         break;
                     case 3:
-                        //planesMenu.Show();
+                        planesMenu.Show();
                         break;
                     case 4:
                         crewMenu.Show();

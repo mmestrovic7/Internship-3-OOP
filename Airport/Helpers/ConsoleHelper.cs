@@ -104,7 +104,7 @@ public class ConsoleHelper
         public static void PrintPlaneHeader()
         {
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine($"\"naziv - godina proizvodnje - kapacitet\"");
+            Console.WriteLine($"naziv - godina proizvodnje - kapacitet");
             Console.WriteLine();
             Console.ResetColor();
         }
@@ -122,7 +122,7 @@ public class ConsoleHelper
         public static void PrintCrewHeader()
         {
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine($"\"naziv - status\"");
+            Console.WriteLine($"naziv - status");
             Console.WriteLine();
             Console.ResetColor();
         }
