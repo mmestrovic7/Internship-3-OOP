@@ -2,7 +2,7 @@ namespace Airport.Classes;
 
 public class Base
 {
-    public string Id { get; set; }
+    public string Id { get; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
